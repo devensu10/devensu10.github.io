@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>deven space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="deven space">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="deven space">
+<meta property="og:locale">
+<meta property="article:author" content="deven">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="deven space" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">deven space</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-数据仓库分层" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/09/07/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E5%B1%82/" class="article-date">
+  <time class="dt-published" datetime="2022-09-07T01:25:00.000Z" itemprop="datePublished">2022-09-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Markdown/">Markdown</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/09/07/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E5%B1%82/">数据仓库分层</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p><strong>0****1</strong></p>
+<p><strong>为什么要分层</strong></p>
+<p>想要知道数仓要分几层，那就必须得先回答另一个问题：就是数据仓库为什么要分层？分层思想到底是在干什么？</p>
+<p>直接上结论：<strong>分层是为了解耦</strong>。请把这句话刻在脑子里。因为这决定了你的数据架构到底要分几层。</p>
+<p>我们直接读取数据源出报表不行么？行！但是你的前台业务、中间的数据处理逻辑和后端的数据库会完全绑死，任何一个点发生变化，都得修改整个设计。</p>
+<p>那按数据处理的逻辑，一个中间表拆一层行么？行啊。但是你这样链条太长，不仅流程管控难度提升，而且一旦发生问题，追溯几乎变得不可能。</p>
+<p>所以，既不能不分，又不能分的太多。那应该怎么弄呢？</p>
+<p>你看信息系统的架构发展历程，就是从单体–&gt;水平分层&#x2F;垂直拆分–&gt;微服务–&gt;服务网格，都是不停的拆，这是在干啥？就是在<strong>解耦，再解耦</strong>。但是也没有无限的往下拆，拆到服务网格，就开始合并了，这就是中台的逻辑。</p>
+<p>数据架构上也是一样，有ODS层是为了保存原始数据，有明细层是为了保证后续数据的干净和统一，有汇总层是为了减少运算，有宽表层&#x2F;维度建模层是为了使用方便，有DM层是为了某个领域使用方便。这也是不停的在解耦、再解耦。</p>
+<p>所以要分几层，取决于公司是业务有多复杂，变化有多频繁，我们对应的就需要对业务和原始数据之间做多少层的解耦。</p>
+<p><strong>0****2</strong></p>
+<p><strong>一般有哪些层</strong></p>
+<p>****操作数据层**（Operation Data Store，*<em>ODS*</em>），**即原始数据层，又叫贴源层，与业务系统基本同构（可能会增加管理字段），目的是保留历史，解耦业务数据库，这样整个数据平台只需要访问一次业务数据库即可。所以ODS层存在的意义是尽可能减少对业务数据库的访问压力。ODS层有些时候会细分为两层，一个STG数据缓冲层，存原始数据，一个ODS，存简单清洗的数据。</p>
+<p>****明细数据层**（Data Warehouse Detail，*<em>DWD*</em>），**对数据进行清洗、代码统一、字段统一、格式统一、简单聚合等工作。DWD层存在的意义是做数据的标准化，为后续的处理提供干净、统一、标准的数据。</p>
+<p>****基础数据层**（Data Warehouse Base，*<em>DWB*</em>），**又叫轻度汇总层，遵照维度模型的原理，将数据拆成维度和事实，进行维度、事实的统一。对数据进行轻度汇总，形成指标结果。</p>
+<p>****服务数据层**（Data Warehouse Service，*<em>DWS*</em>），**按照业务目标，对已经处理好的数据进行横向汇聚、纵向汇总。按照宽表模型进行数据冗余和预计算，以空间换时间。</p>
+<p><strong>宽表层</strong>，大数据环境下的DWS层。存储各种宽表。</p>
+<p><strong>DIM层</strong>，即dimension，维度，即存储所有维度（可以理解为码表）。其实DIM不应该单独作为一层，因为从DWD层开始向上的所有层都需要用到DIM中的内容，所以他是横跨多层的。</p>
+<p><strong>标签层</strong>，即标签工厂生产的各种标签，用户标签、商品标签等等，一般在DWD层之上，DWB层之下，互联网业务特有，现在也慢慢扩展到其他领域。</p>
+<p><strong>DM层</strong>，又叫主题层，与主题域不一样，这是在企业级数仓之上，对某个单独业务或者部门专门设立的小型数据集市。DM层又可以根据业务需求再次拆分。</p>
+<p><strong>0****3</strong></p>
+<p><strong>如何设计数仓分层架构</strong></p>
+<p>还是回到最开始的那句话：看你的业务复杂度和实际情况。假如说，时间紧任务重，一周就要看结果，那就别说了，直接连业务数据库是最合适的。要啥分层？没那个时间。</p>
+<p>如果说公司业务简单，且相对比较固定，数据来源不多，结构也很清晰，需求也不多，可以ODS+DWD+DWS，三层足矣。ODS起到解耦业务数据库+异构数据源的问题，DWD解决数据脏乱差的问题，DWS直接面向前台业务需求。够了。</p>
+<p>如果说公司业务一般复杂，每年都要跟着战略变，那就中规中矩的设计4层，多一层DWB层做汇总，多一层解耦，业务变化的时候，我们只改DWS层就好了，最多穿透到DWB层。每年按照战略调整一次，工作量也不会太大，最重要的是能保证底层结构的稳定和数据分析的可持续性。</p>
+<p>如果说公司业务非常复杂，业务线众多，那就在4层基础上加一层DM，每条业务线一个单独的DM。如果是集团型的，DM还可以设置在汇总层下面。放在那里，取决于组织结构。</p>
+<p>如果说公司业务变化非常频繁，仨月变一次业务方向，后台数据每天都改数据库，说实话，没啥好办法。要么用人力堆，要么提取相对比较固定的内容去建设数仓，变化太快的直接做固定报表吧。前后都变，中间的没法干活，怎么解耦都没用。谁有好办法，可以告诉我，我去学习一下。</p>
+<p>至于DIM层，不管哪一种方式，都需要。</p>
+<p>互联网模式加一层标签层。</p>
+<p>大数据环境可以用宽表层替换DWS层（其实都一样）。</p>
+<p><strong>0****4</strong></p>
+<p><strong>数仓分层示例参考</strong></p>
+<p><strong>3层数仓架构（方案一）：</strong></p>
+<p><img src="/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E5%B1%82.assets/640.png" alt="640"></p>
+<p>3层数据仓库建设的架构一般指的是ODS、DW（数仓）、DM（数据集市），其中DW和DM又可以再拆成N层。不过我没有找到大厂的这种架构分享，大抵是因为这么各大厂不屑于画这么简单的分层架构图吧。</p>
+<p><strong>3层数仓架构（方案二）：</strong></p>
+<p>![640 (1)](数据仓库分层.assets&#x2F;640 (1).png)</p>
+<p>另外一种3层数仓是ODS+DWD+DWS，这样就能满足解耦业务数据库、数据标准化+统一化和面向应用等基础功能。同样也没有找到大厂的3层分享案例。各位凑合着看吧。</p>
+<p><strong>美团大交通4层实时数仓架构：</strong></p>
+<p>![640 (2)](数据仓库分层.assets&#x2F;640 (2).png)</p>
+<p>来源于美团技术公众号</p>
+<p>特意放上实时数仓的架构图，就是想说明一下无论是实时数仓还是离线数仓，架构都是一样的，该分几层分几层。只不过实时数仓用的是Kafka等MQ作为实时存储介质。</p>
+<p><strong>搜狐5层数据仓库架构：</strong></p>
+<p>**<br>**![640 (3)](数据仓库分层.assets&#x2F;640 (3).png)</p>
+<p>![图片](新建 Markdown File.assets&#x2F;640</p>
+<p>来源于搜狐公开PPT</p>
+<p>这是搜狐的5层数据仓库架构。之所以放搜狐的案例，是因为这里有一个STG层。这边把ODS细分为STG和ODS。STG是数据缓冲层，相当于贴源层，就是跟业务系统保持一致的结构，而这个架构中的ODS是经过简单清洗的明细数据。</p>
+<p><strong>美团酒旅6层数仓架构：</strong></p>
+<p>![640 (4)](数据仓库分层.assets&#x2F;640 (4).png)</p>
+<p>这是美团酒旅业务的数仓架构，业务足够复杂，所以分成6层了。以第3代为例，ODS、数据整合层、多维明细层、汇总层、主题层、应用层。每一层的目的非常清晰。</p>
+<ul>
+<li><p>**ODS：**汇聚原始数据；</p>
+</li>
+<li><p>**数据整合层：**对数据进行清洗、筛选、整合等操作；</p>
+</li>
+<li><p>**多维明细层：**进行维度建模；</p>
+</li>
+<li><p>**汇总层：**进行各级汇总；</p>
+</li>
+<li><p>**主题层：**按照业务领域，切分主题域，提供面向业务主题的数据集；</p>
+</li>
+<li><p>**应用层：**面向前端应用汇聚数据。</p>
+</li>
+</ul>
+<p>另外，美团的这张图，也体现了架构的另外一个重点：架构是需要不断的优化调整的，不能超前太多，也不能脱离业务。按照Inmon和Kimball吵了十几年的经验上看，建议架构设计时，按超越当前实际情况1~1.5年的设计是比较合适的。超越太长会导致建设期过长或者条件不成熟而失败，太短则修改太过频繁。</p>
+<p><strong>0****5</strong></p>
+<p><strong>总结</strong></p>
+<p>数据仓库分层的核心逻辑是<strong>解耦</strong>。需要在有限时间、资源等条件下满足业务需求，同时又要兼顾业务的快速变化。所以作为数据架构师，需要兼顾业务的复杂变化，以及开发的复杂度和可维护性，在两者之间做一个平衡和取舍。</p>
+<p>至于分几层，建议按照目前的业务和建设现状，进行合理解构和分层设计，一般刚开始做，建议3、4层。规划1-1.5年的架构，然后不断的建设、优化、再优化。不断逼近满足所有需求。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/09/07/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E5%B1%82/" data-id="cuidKAw8Vs3_xPu3lRuDHwxFw" data-title="数据仓库分层" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/" rel="tag">数据治理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Markdown/">Markdown</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/" rel="tag">数据治理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 10px;">大数据</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/" style="font-size: 10px;">数据治理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">September 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/07/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E5%B1%82/">数据仓库分层</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 deven<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
