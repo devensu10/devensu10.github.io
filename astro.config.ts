@@ -29,8 +29,8 @@ export default defineConfig({
     }),
   ],
   i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
+   locales: ["zh", "en"],
+    defaultLocale: "zh",
     routing: {
       prefixDefaultLocale: false,
     },
@@ -60,13 +60,22 @@ export default defineConfig({
   },
   fonts: [
     {
-      name: "Google Sans Code",
-      cssVariable: "--font-google-sans-code",
-      provider: fontProviders.google(),
+      name: "Noto Sans SC",
+      cssVariable: "--font-noto-sans-sc",
+      provider: fontProviders.fontsource(),
+      fallbacks: ["system-ui", "sans-serif"],
+      weights: [300, 400, 500, 700],
+      styles: ["normal"],
+      // `ttf` is required for the OG image routes: Satori cannot parse woff2.
+      formats: ["woff2", "ttf"],
+    },
+    {
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
+      provider: fontProviders.fontsource(),
       fallbacks: ["monospace"],
-      weights: [300, 400, 500, 600, 700],
+      weights: [400, 500, 700],
       styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
     },
   ],
   env: {

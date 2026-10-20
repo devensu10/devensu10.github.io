@@ -35,7 +35,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
   >
     <section id="hero" class="border-border border-b pt-8 pb-6">
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
+        Hey, I'm deven.
       </h1>
       <a
         target="_blank"
@@ -52,13 +52,17 @@ const homePath = getRelativeLocaleUrl(locale, "");
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
+      <p class="mt-2">
+        嗨，我是 <strong>deven</strong>，常驻成都。
       </p>
       <p class="mt-2">
+        爱折腾—写后端是搭房子的梁柱，做数据是梳理管道和电路，搞 AI
+        是装智能家居。从 0 到 1 搭过东西，也天天处理那些螺丝松了、管道堵了、智能门锁没电了的问题。
+      </p>
+      <p class="mt-2">
+        这个博客记录真实部署中的坑、设计取舍和踩过的雷。先对自己有用，再希望对同路人有用。
+      </p>
+      <!-- <p class="mt-2">
         Read the blog posts or check{" "}
         <LinkButton
           class="hover:text-accent underline decoration-dashed underline-offset-4"
@@ -67,7 +71,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           README
         </LinkButton>{" "}
         for more info.
-      </p>
+      </p> -->
       {
         socials.length > 0 && (
           <div class="mt-4 flex max-sm:flex-col sm:items-center">
@@ -136,3 +140,4 @@ const homePath = getRelativeLocaleUrl(locale, "");
     }
   });
 </script>
+
