@@ -21,6 +21,8 @@ export default {
     editPage: "Edit page",
     previousPost: "Previous Post",
     nextPost: "Next Post",
+    readingTime: "{{minutes}} min read",
+    tableOfContents: "Table of Contents",
   },
   pagination: {
     prev: "Prev",

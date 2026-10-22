@@ -1,0 +1,29 @@
+---
+import IconEye from "@/assets/icons/IconEye.svg";
+
+type Props = {
+  slug: string;
+  size?: "sm" | "lg";
+  class?: string;
+};
+
+const { slug, size = "sm", class: className = "" } = Astro.props;
+---
+
+<span
+  class:list={[
+    "text-muted-foreground inline-flex items-center gap-x-2",
+    className,
+  ]}
+  data-view-count
+  data-slug={slug}
+>
+  <IconEye
+    aria-hidden="true"
+    class:list={[
+      "inline-block size-6 min-w-5.5",
+      { "scale-90": size === "sm" },
+    ]}
+  />
+  <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>—</span>
+</span>

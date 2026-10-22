@@ -34,6 +34,14 @@
   @apply underline decoration-wavy decoration-2 underline-offset-8;
 }
 
+@utility toc-link {
+  @apply text-muted-foreground hover:text-foreground block border-l-2 border-transparent ps-3 text-sm leading-snug transition-colors;
+}
+
+@utility toc-link-active {
+  @apply border-accent text-accent font-medium;
+}
+
 :target {
   scroll-margin-block: 1rem;
 }

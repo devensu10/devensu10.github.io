@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@cloudflare/workers-types": "^5.20261022.1",
     "@pagefind/default-ui": "^1.5.2",
     "@shikijs/transformers": "^4.3.0",
     "@tailwindcss/typography": "^0.5.20",

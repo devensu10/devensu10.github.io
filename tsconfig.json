@@ -3,6 +3,7 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist", "public/pagefind"],
   "compilerOptions": {
+    "types": ["@cloudflare/workers-types"],
     "paths": {
       "@/*": ["./src/*"],
       "@/astro-paper.config": ["./astro-paper.config"]

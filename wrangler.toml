@@ -1,0 +1,31 @@
+# Cloudflare Pages Functions + D1 configuration
+#
+# 部署前必须做两件事：
+#
+# 1. 在 Cloudflare Dashboard 创建 D1 数据库
+#    Workers & Pages → D1 → Create database → 复制 database_id 填到下面
+#    然后在 D1 控制台 SQL Editor 执行 d1/schema.sql
+#
+# 2. 在 Pages 项目 Settings 里绑定 D1（wrangler.toml 只管本地调试，
+#    线上绑定必须在 Dashboard 手动配一次）
+#    Workers & Pages → 你的项目 → Settings → Functions → D1 database bindings
+#    Variable name: DB
+#    加完回 Deployments 重新部署一次
+#
+# 本地调 API（可选）：
+#   npx astro build
+#   npx wrangler d1 execute blog-views --local --file=d1/schema.sql
+#   npx wrangler pages dev          # 自动读取下面的 d1_databases 绑定
+#   curl http://localhost:8788/api/views?slug=/big-data/flink-cep
+#
+# 注意：不要用 `wrangler pages dev dist --d1 DB=blog-views`，
+# 那条命令会创建一个独立的本地 D1，和上面 execute 建表的库不是同一个。
+
+name = "deven-blog"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "blog-views"
+database_id = "eeee5a04-bb3f-48ab-a205-ba7324307d82"

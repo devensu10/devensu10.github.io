@@ -21,6 +21,8 @@ export default {
     editPage: "编辑页面",
     previousPost: "上一篇",
     nextPost: "下一篇",
+    readingTime: "阅读约 {{minutes}} 分钟",
+    tableOfContents: "目录",
   },
   pagination: {
     prev: "上一页",

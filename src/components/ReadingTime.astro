@@ -1,0 +1,35 @@
+---
+import { tplStr, useTranslations } from "@/i18n";
+
+type Props = {
+  minutes: number;
+  size?: "sm" | "lg";
+  class?: string;
+};
+
+const { minutes, size = "sm", class: className = "" } = Astro.props;
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<div
+  class:list={["text-muted-foreground flex items-center gap-x-2", className]}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    class:list={["inline-block size-6 min-w-5.5", { "scale-90": size === "sm" }]}
+    ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+      d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 7v5l3 2"
+    ></path></svg
+  >
+  <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>
+    {tplStr(t.post.readingTime, { minutes })}
+  </span>
+</div>

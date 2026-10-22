@@ -1,8 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getPostUrl } from "@/utils/getPostPaths";
+import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { toTransitionName } from "@/utils/toTransitionName";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Datetime from "./Datetime.astro";
+import ViewCount from "./ViewCount.astro";
 
 type Props = {
   variant?: "h2" | "h3";
@@ -11,21 +13,66 @@ type Props = {
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
 const { title, description, ...props } = data;
+const slug = getPostSlug(id, filePath);
 ---
 
-<li class="my-6">
+<li class="group my-4 first:mt-6 last:mb-6">
   <a
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class:list={[
-      "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
+      "relative block overflow-hidden rounded-xl border border-border/50 bg-background/60 p-5 ps-6",
+      "transition-[border-color,background-color,box-shadow] duration-300 ease-out",
+      "hover:border-accent/60 hover:bg-accent/5 hover:shadow-[0_10px_30px_-18px_var(--color-accent)]",
+      "focus-visible:border-accent focus-visible:bg-accent/5",
+      "motion-reduce:transition-none",
     ]}
   >
-    <Heading transition:name={toTransitionName(id)}>
-      {title}
-    </Heading>
+    <span
+      aria-hidden="true"
+      class:list={[
+        "bg-accent absolute inset-y-4 start-0 w-[3px] rounded-full",
+        "scale-y-0 opacity-0 transition-[transform,opacity] duration-300 ease-out",
+        "group-hover:scale-y-100 group-hover:opacity-100",
+        "group-focus-visible:scale-y-100 group-focus-visible:opacity-100",
+        "motion-reduce:transition-none",
+      ]}
+    ></span>
+
+    <div class="flex items-start justify-between gap-3">
+      <Heading
+        transition:name={toTransitionName(id)}
+        class:list={[
+          "text-accent inline-block text-lg font-medium tracking-wide",
+          "decoration-dashed underline-offset-4 group-hover:underline",
+          "group-focus-visible:no-underline",
+        ]}
+      >
+        {title}
+      </Heading>
+      <IconArrowRight
+        aria-hidden="true"
+        class:list={[
+          "text-accent mt-1 size-5 min-w-5 shrink-0 rtl:rotate-180",
+          "-translate-x-1 opacity-0 transition-[transform,opacity] duration-300 ease-out",
+          "group-hover:translate-x-0 group-hover:opacity-100",
+          "group-focus-visible:translate-x-0 group-focus-visible:opacity-100",
+          "motion-reduce:transition-none",
+        ]}
+      />
+    </div>
+
+    <div class="flex items-center gap-3">
+      <Datetime {...props} />
+      <span aria-hidden="true" class="text-muted-foreground/40">·</span>
+      <ViewCount {slug} />
+    </div>
+
+    {
+      description && (
+        <p class="text-foreground/70 mt-3 line-clamp-2 text-sm leading-relaxed">
+          {description}
+        </p>
+      )
+    }
   </a>
-  <Datetime {...props} />
-  <p>{description}</p>
 </li>
